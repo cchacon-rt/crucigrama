@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
+#include <ctype.h>
 
 #define FILAS 12
 #define COLUMNAS 12
@@ -9,7 +10,7 @@ char car;
 char palabra[50];
 
 #define vacio '#'
-#define espacio ' '
+#define espacio '.'
 
 //char tablero[FILAS][COLUMNAS];  //matriz gllobal bidimensional
 typedef struct
@@ -20,25 +21,22 @@ typedef struct
 
 T_casilla tablero[FILAS][COLUMNAS];
 /*/////////////////////////////////////////////////////////////*/
-
-void adquirirPalabraSiguiente(FILE *aStream)
+void adquirirPalabras (FILE *aStream)
 {
     int i;
 
-    while (((car==' ')||(car=='\t')||(car=='\n')||(car=='\r')) && (car!=EOF)) car = fgetc(aStream);
+    while (((car==' ')||(car=='\t')||(car=='\n')||(car=='\r') || (isdigit(car))) && (car!=EOF)) car = fgetc(aStream);
+        i = 0;
 
-    i = 0;
-
-    while (((car!=' ')&&(car!='\t')&&(car!='\n')&&(car!='\r')) && (car!=EOF))
+    while (((car!=' ')&&(car!='\t')&&(car!='\n')&&(car!='\r') && !(isdigit(car))) && (car!=EOF))
     {
-        palabra[i] = car;
-        i++;
+        palabra[i++] = car;
         car = fgetc(aStream);
     }
-
     palabra[i] = '\0';
 }
-/*////////////////////////////////////////////////////////////*/
+
+/*/////////////////////////////////////////////////*/
 
 //esta funcion inicia la lectura del primer car del input y hace un buclesito
 void adquirirPrimeraPalabra()
@@ -50,12 +48,19 @@ void adquirirPrimeraPalabra()
         fprintf(stderr,"Error al abrir el archivo\n");
         exit(2);
     }
-
     car = fgetc(aStream);
-    adquirirPalabraSiguiente (aStream);  //this calls another function
 
+    while (car)
+    {
+        adquirirPalabras (aStream);  //this calls another function
+        if (palabra[0] != '\0')
+        {
+            printf("%s\n", palabra);
+        }
+    } 
     fclose(aStream); 
 }
+
 
 /*///////////////////////////////////////////////////////////*/
 void funcionTablero(){
@@ -123,9 +128,10 @@ tablero[11][0].valor = vacio;
 tablero[11][1].valor = vacio;
 tablero[11][9].valor = vacio;
 tablero[11][11].valor = vacio;
+
 }
 
-/*////////////////////////////////////////////////////////////*/
+/*//////////////////////////////////////////////////*/
 void imprimirTablero()
 {
     int f,  //filas
@@ -139,11 +145,9 @@ void imprimirTablero()
         }
         printf("\n");
     }
-    
 }
 
-
-/*///////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////*/
 
 int main()
 {
@@ -151,13 +155,21 @@ int main()
     printf("║            C R U C I G R A M A              ║\n");
     printf("╚═════════════════════════════════════════════╝\n");
 
-    adquirirPrimeraPalabra();
 
     funcionTablero();
 
-    printf("\nPrimera palabra leida: %s\n", palabra);
-
     imprimirTablero();
+
+    adquirirPrimeraPalabra();
+    //aca verificamos que el archivo inicie con la palabra PALABRAS
+
+    if(strcmp(palabra,"PALABRAS")!=0)
+    {   
+        fprintf(stderr,"Error: PALABRAS del crucigrama no encontradas\n");    //de lo contrario imprime un error
+        exit(1);
+    } else {
+        printf("\nPALABRAS: %s\n", palabra);
+    }
 
     return 0;
 }
