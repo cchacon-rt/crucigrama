@@ -57,6 +57,9 @@ void adquirirPrimeraPalabra()
         {
             printf("%s\n", palabra);
         }
+        else {
+            exit(2);
+        }
     } 
     fclose(aStream); 
 }
