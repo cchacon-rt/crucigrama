@@ -3,11 +3,13 @@
 #include <string.h>
 #include <ctype.h>
 
-#define VACIO   '#'
-#define ESPACIO '.'
+typedef enum {
+    ESPACIO = '.',   // casilla libre
+    VACIO   = '#'    // casilla negra
+} TipoCasilla;
 
 typedef struct {
-    char valor;
+    TipoCasilla valor;
     int usoContador;
 } T_casilla;
 
@@ -96,7 +98,6 @@ int main() {
 
     inicializarTablero();
 
-    // leer coordenadas hasta PALABRAS
     int leyendoPalabras = 0;
     while (car != EOF && leyendoPalabras == 0) {
         adquirirPalabra(aStream);
@@ -114,13 +115,11 @@ int main() {
         }
     }
 
-    // imprimir tablero 
-    printf("╔══════════════════════════════════════╗\n");
-    printf("║          C R U C I G R A M A         ║\n");
-    printf("╚══════════════════════════════════════╝\n");
+    printf("╔════════════════════════════════╗\n");
+    printf("║       C R U C I G R A M A      ║\n");
+    printf("╚════════════════════════════════╝\n");
     imprimirTablero();
 
-    // leer e imprimir palabras
     printf("╔═════════════════════╗\n");
     printf("║   P A L A B R A S   ║\n");
     printf("╚═════════════════════╝\n");
