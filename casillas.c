@@ -6,21 +6,45 @@
 #define FILAS 12
 #define COLUMNAS 12
 
+char lineas[20];
+char columnas[15];
+
 char car;
 char palabra[50];
 
 #define vacio '#'
 #define espacio '.'
 
-//char tablero[FILAS][COLUMNAS];  //matriz gllobal bidimensional
+
 typedef struct
 {
     char valor;
     int usoContador;
 } T_casilla;
 
-T_casilla tablero[FILAS][COLUMNAS];
+
+
+//T_casilla tablero[FILAS][COLUMNAS];
 /*/////////////////////////////////////////////////////////////*/
+typedef enum { TRUE = 1, FALSE = 0 } T_bool;  //da valor de T o F segun un 1 o 0
+
+
+typedef enum{
+    HORIZONTAL = 1,
+    VERTICAL = 2
+}   T_sentido;
+
+typedef struct{
+    T_sentido sentido;
+    int x;
+    int y;
+    int len; //longitud
+    T_bool ocupado;
+} T_espacio;
+
+
+
+
 void adquirirPalabras (FILE *aStream)
 {
     int i;
@@ -78,59 +102,26 @@ void funcionTablero(){
     }
 
 
+    T_espacio espacio;
+
+    espacio.sentido=VERTICAL;
+
+
+  if ((tablero = (T_casilla **) malloc (numLineas * sizeof (T_casilla *))) == NULL) {
+      perror ("Malloc tablero err!\n");
+      exit (1);
+   }
+   for (i = 0; i < numLineas; i++)
+      if ((tablero[i] = (T_casilla *) malloc (numColumnas * sizeof (T_casilla))) == NULL) {
+         perror ("Malloc tablero err!\n");
+         exit (2);
+      }
+
+
 //posicion de palabras en el tablero
 //esto esta siendo manual, queremos que adquiera x,y de forma automatica
-tablero[0][4].valor = vacio;
+//tablero[0][4].valor = vacio;
 
-tablero[1][1].valor = vacio;
-tablero[1][6].valor = vacio;
-tablero[1][8].valor = vacio;
-tablero[1][10].valor = vacio;
-
-tablero[2][4].valor = vacio;
-
-tablero[3][1].valor = vacio;
-tablero[3][3].valor = vacio;
-tablero[3][6].valor = vacio;
-tablero[3][8].valor = vacio;
-tablero[3][10].valor = vacio;
-
-tablero[4][0].valor = vacio;
-tablero[4][5].valor = vacio;
-
-tablero[5][6].valor = vacio;
-tablero[5][8].valor = vacio;
-tablero[5][10].valor = vacio;
-tablero[5][11].valor = vacio;
-
-tablero[6][0].valor = vacio;
-tablero[6][2].valor = vacio;
-tablero[6][4].valor = vacio;
-tablero[6][9].valor = vacio;
-tablero[6][11].valor = vacio;
-
-tablero[7][6].valor = vacio;
-tablero[7][8].valor = vacio;
-tablero[7][9].valor = vacio;
-tablero[7][11].valor = vacio;
-
-tablero[8][0].valor = vacio;
-tablero[8][2].valor = vacio;
-tablero[8][4].valor = vacio;
-
-tablero[9][7].valor = vacio;
-tablero[9][9].valor = vacio;
-tablero[9][11].valor = vacio;
-
-tablero[10][0].valor = vacio;
-tablero[10][2].valor = vacio;
-tablero[10][4].valor = vacio;
-tablero[10][6].valor = vacio;
-
-tablero[11][0].valor = vacio;
-tablero[11][1].valor = vacio;
-tablero[11][9].valor = vacio;
-tablero[11][11].valor = vacio;
 
 }
 
